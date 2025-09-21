@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Merge !</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #a8e063 0%, #f7ea00 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 5px dashed #56ab2f;
+        }
+
+        #next-fruit-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #fffce8;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #ffde7a;
+            position: relative;
+        }
+
+        #next-fruit-container::before {
+            content: "👉";
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+        }
+
+        #next-fruit-text {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #56ab2f;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        #next-fruit-wrapper {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff9c5;
+            border-radius: 50%;
+            border: 3px solid #ffde7a;
+            box-shadow: 0 0 10px rgba(86, 171, 47, 0.5);
+        }
+
+        #next-fruit {
+            border-radius: 50%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        #game-and-legend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 4 / 3;
+            background-color: #e9f5db;
+            border: 5px solid #56ab2f;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #legend {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fffce8;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border: 3px solid #ffde7a;
+        }
+
+        #legend h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+            color: #56ab2f;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        #legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            background-color: #fff9c5;
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 2px solid #ffde7a;
+        }
+
+        .legend-fruit {
+            border-radius: 50%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 30px;
+            height: 30px;
+        }
+
+        .fruit {
+            border-radius: 50%;
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transform-origin: center center;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid white;
+        }
+
+        .cherry { background-image: url('img/srk.png'); }
+        .strawberry { background-image: url('img/mukesh.png'); }
+        .grape { background-image: url('img/prith.png'); }
+        .orange { background-image: url('img/bab.png'); }
+        .apple { background-image: url('img/suresh.png'); }
+        .pear { background-image: url('img/mohan.png'); }
+        .pineapple { background-image: url('img/thankan.png'); }
+
+        @media (min-width: 768px) {
+            #game-and-legend {
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            #game-container {
+                width: 600px;
+                height: 450px;
+            }
+
+            #legend {
+                width: 200px;
+                height: 450px;
+                overflow-y: auto;
+            }
+
+            #legend-items {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            #game-container {
+                width: 800px;
+                height: 600px;
+            }
+        }
+
+        #score-container {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px;
+            text-align: center;
+            color: #56ab2f;
+            text-shadow: 1px 1px 0 #fff;
+            background-color: #fff9c5;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 3px solid #ffde7a;
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff6b6b;
+            font-size: 52px;
+            font-weight: bold;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            z-index: 10;
+            text-align: center;
+            width: 80%;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+            border: 5px solid #ffde7a;
+            text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* Fun animations and decorations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #next-fruit-wrapper {
+            animation: bounce 2s infinite;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffde7a;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .game-title {
+            font-size: 28px;
+            color: #56ab2f;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .fun-message {
+            position: absolute;
+            font-size: 16px;
+            color: #ff6b6b;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 5;
+            text-shadow: 1px 1px 0 #fff;
+            animation: floatUp 2s forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-wrapper">
+        <h1 class="game-title">Meme Merge ! 🎮</h1>
+        <div id="next-fruit-container">
+            <p id="next-fruit-text">Next Monthaaa! 👇</p>
+            <div id="next-fruit-wrapper">
+                <div id="next-fruit"></div>
+            </div>
+            <div id="score-container">
+                <span id="score">Score: 0</span>
+            </div>
+        </div>
+        <div id="game-and-legend">
+            <div id="game-container"></div>
+            <div id="legend" style="display:none;">
+                <h2>Meme Merge Madness! 🤪</h2>
+                <div id="legend-items"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create some confetti for extra fun
+        function createConfetti() {
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = -20 + 'px';
+                confetti.style.backgroundColor = ['#a8e063', '#56ab2f', '#ffde7a', '#ff6b6b'][Math.floor(Math.random() * 4)];
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(confetti);
+                
+                // Animate the confetti
+                const animationDuration = 2 + Math.random() * 3;
+                confetti.animate([
+                    { top: '-20px', left: confetti.style.left },
+                    { top: '100vh', left: parseFloat(confetti.style.left) + (Math.random() * 200 - 100) + 'px' }
+                ], {
+                    duration: animationDuration * 1000,
+                    fill: 'forwards'
+                });
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, animationDuration * 1000);
+            }
+        }
+        
+        // Create floating messages for fun feedback
+        function showFunMessage(text, x, y) {
+            const message = document.createElement('div');
+            message.classList.add('fun-message');
+            message.textContent = text;
+            message.style.left = x + 'px';
+            message.style.top = y + 'px';
+            document.getElementById('game-container').appendChild(message);
+            
+            // Remove message after animation
+            setTimeout(() => {
+                message.remove();
+            }, 2000);
+        }
+        
+        // Initial confetti on page load
+        window.addEventListener('load', () => {
+            setTimeout(createConfetti, 500);
+            setTimeout(createConfetti, 1000);
+        });
+    </script>
+    
+    <script src="config.js"></script>
+    <script src="fruit.js"></script>
+    <script src="utils.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
