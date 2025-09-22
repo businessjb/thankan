@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meme Merge !</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             margin: 0;
@@ -15,105 +19,138 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            touch-action: manipulation;
         }
 
         #game-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
             max-width: 100%;
-            padding: 15px;
+            padding: 10px;
             box-sizing: border-box;
             background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
+            border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             border: 5px dashed #56ab2f;
+            margin: 5px;
+        }
+
+        .game-title {
+            font-size: 22px;
+            color: #56ab2f;
+            margin: 10px 0;
+            text-align: center;
+            text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        #game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            gap: 10px;
         }
 
         #next-fruit-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 15px;
             background-color: #fffce8;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 3px solid #ffde7a;
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ffde7a;
             position: relative;
-        }
-
-        #next-fruit-container::before {
-            content: "👉";
-            position: absolute;
-            left: -30px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 24px;
+            flex: 1;
+            max-width: 120px;
         }
 
         #next-fruit-text {
-            margin: 0 0 10px 0;
-            font-size: 18px;
+            margin: 0 0 5px 0;
+            font-size: 14px;
             font-weight: bold;
             color: #56ab2f;
             text-shadow: 1px 1px 0 #fff;
+            text-align: center;
         }
 
         #next-fruit-wrapper {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: #fff9c5;
             border-radius: 50%;
-            border: 3px solid #ffde7a;
-            box-shadow: 0 0 10px rgba(86, 171, 47, 0.5);
+            border: 2px solid #ffde7a;
+            box-shadow: 0 0 5px rgba(86, 171, 47, 0.5);
         }
 
         #next-fruit {
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
         }
 
+        #score-container {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: #56ab2f;
+            text-shadow: 1px 1px 0 #fff;
+            background-color: #fff9c5;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid #ffde7a;
+            flex: 1;
+            max-width: 120px;
+        }
+
         #game-and-legend {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             width: 100%;
         }
 
         #game-container {
             width: 100%;
-            max-width: 800px;
-            aspect-ratio: 4 / 3;
+            max-width: 100%;
+            height: 60vh;
+            min-height: 300px;
+            max-height: 500px;
             background-color: #e9f5db;
-            border: 5px solid #56ab2f;
+            border: 3px solid #56ab2f;
             position: relative;
             overflow: hidden;
-            border-radius: 15px;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            touch-action: none;
         }
 
         #legend {
             width: 100%;
-            max-width: 800px;
             background-color: #fffce8;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
-            border: 3px solid #ffde7a;
+            border: 2px solid #ffde7a;
+            max-height: 150px;
+            overflow-y: auto;
         }
 
         #legend h2 {
             margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
             text-align: center;
             color: #56ab2f;
             text-shadow: 1px 1px 0 #fff;
@@ -123,18 +160,18 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 8px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 5px;
+            font-size: 12px;
             background-color: #fff9c5;
-            padding: 5px 10px;
-            border-radius: 20px;
-            border: 2px solid #ffde7a;
+            padding: 3px 8px;
+            border-radius: 15px;
+            border: 1px solid #ffde7a;
         }
 
         .legend-fruit {
@@ -142,8 +179,8 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
         }
 
         .fruit {
@@ -153,39 +190,91 @@
             background-repeat: no-repeat;
             background-position: center;
             transform-origin: center center;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            border: 2px solid white;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            border: 1px solid white;
+            touch-action: none;
+            user-select: none;
         }
 
-        .cherry { background-image: url('img/srk.png'); }
-        .strawberry { background-image: url('img/mukesh.png'); }
-        .grape { background-image: url('img/prith.png'); }
-        .orange { background-image: url('img/bab.png'); }
-        .apple { background-image: url('img/suresh.png'); }
-        .pear { background-image: url('img/mohan.png'); }
-        .pineapple { background-image: url('img/thankan.png'); }
+        .cherry { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23ff6b6b"/><circle cx="35" cy="35" r="10" fill="%23fff"/><circle cx="65" cy="35" r="8" fill="%23fff"/></svg>'); }
+        .strawberry { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23ff6b6b"/><path d="M30,30 Q50,10 70,30" stroke="%2356ab2f" stroke-width="5" fill="none"/></svg>'); }
+        .grape { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%239b59b6"/><circle cx="35" cy="35" r="8" fill="%23fff" opacity="0.3"/><circle cx="65" cy="35" r="6" fill="%23fff" opacity="0.3"/></svg>'); }
+        .orange { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f39c12"/><path d="M30,50 Q50,30 70,50 Q50,70 30,50" fill="%23e67e22" opacity="0.7"/></svg>'); }
+        .apple { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23e74c3c"/><path d="M40,30 Q50,20 60,30 Q55,25 50,25 Q45,25 40,30" fill="%2356ab2f"/></svg>'); }
+        .pear { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="30" ry="40" fill="%23f1c40f"/><path d="M45,25 Q50,15 55,25 Q50,20 45,25" fill="%2356ab2f"/></svg>'); }
+        .pineapple { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f39c12"/><path d="M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65" stroke="%23e67e22" stroke-width="3"/></svg>'); }
 
         @media (min-width: 768px) {
+            .game-title {
+                font-size: 28px;
+            }
+            
+            #game-wrapper {
+                max-width: 90%;
+                padding: 15px;
+            }
+            
+            #game-header {
+                margin-bottom: 15px;
+            }
+            
+            #next-fruit-container {
+                padding: 10px;
+                max-width: 150px;
+            }
+            
+            #next-fruit-text {
+                font-size: 16px;
+            }
+            
+            #next-fruit-wrapper {
+                width: 50px;
+                height: 50px;
+            }
+            
+            #next-fruit {
+                width: 40px;
+                height: 40px;
+            }
+            
+            #score-container {
+                font-size: 20px;
+                padding: 10px 20px;
+                max-width: 150px;
+            }
+            
             #game-and-legend {
                 flex-direction: row;
                 justify-content: center;
                 align-items: flex-start;
+                gap: 15px;
             }
-
+            
             #game-container {
                 width: 600px;
                 height: 450px;
+                max-height: none;
             }
-
+            
             #legend {
                 width: 200px;
                 height: 450px;
+                max-height: none;
                 overflow-y: auto;
             }
-
+            
             #legend-items {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            
+            .legend-item {
+                font-size: 14px;
+            }
+            
+            .legend-fruit {
+                width: 25px;
+                height: 25px;
             }
         }
 
@@ -196,42 +285,36 @@
             }
         }
 
-        #score-container {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 20px;
-            text-align: center;
-            color: #56ab2f;
-            text-shadow: 1px 1px 0 #fff;
-            background-color: #fff9c5;
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: 3px solid #ffde7a;
-        }
-
         #game-over {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: #ff6b6b;
-            font-size: 52px;
+            font-size: 32px;
             font-weight: bold;
             background-color: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 15px;
             z-index: 10;
             text-align: center;
             width: 80%;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
-            border: 5px solid #ffde7a;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border: 3px solid #ffde7a;
             text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            #game-over {
+                font-size: 52px;
+                padding: 30px;
+            }
         }
 
         /* Fun animations and decorations */
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-5px); }
         }
 
         #next-fruit-wrapper {
@@ -240,24 +323,16 @@
 
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background-color: #ffde7a;
             opacity: 0.7;
             z-index: -1;
         }
 
-        .game-title {
-            font-size: 28px;
-            color: #56ab2f;
-            margin-bottom: 15px;
-            text-align: center;
-            text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(0, 0, 0, 0.1);
-        }
-
         .fun-message {
             position: absolute;
-            font-size: 16px;
+            font-size: 14px;
             color: #ff6b6b;
             font-weight: bold;
             pointer-events: none;
@@ -268,17 +343,54 @@
 
         @keyframes floatUp {
             0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(-40px); opacity: 0; }
+        }
+        
+        /* Mobile-specific improvements */
+        @media (max-width: 480px) {
+            #game-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            #next-fruit-container, #score-container {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            #next-fruit-container {
+                flex-direction: row;
+                justify-content: space-around;
+                max-width: 100%;
+            }
+            
+            #next-fruit-text {
+                margin-bottom: 0;
+                margin-right: 10px;
+            }
+            
+            #game-container {
+                height: 50vh;
+                min-height: 250px;
+            }
+            
+            .game-title {
+                font-size: 20px;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
 <body>
     <div id="game-wrapper">
         <h1 class="game-title">Meme Merge ! 🎮</h1>
-        <div id="next-fruit-container">
-            <p id="next-fruit-text">Next Monthaaa! 👇</p>
-            <div id="next-fruit-wrapper">
-                <div id="next-fruit"></div>
+        <div id="game-header">
+            <div id="next-fruit-container">
+                <p id="next-fruit-text">Next Monthaaa! 👇</p>
+                <div id="next-fruit-wrapper">
+                    <div id="next-fruit"></div>
+                </div>
             </div>
             <div id="score-container">
                 <span id="score">Score: 0</span>
@@ -286,7 +398,7 @@
         </div>
         <div id="game-and-legend">
             <div id="game-container"></div>
-            <div id="legend" style="display:none;">
+            <div id="legend">
                 <h2>Meme Merge Madness! 🤪</h2>
                 <div id="legend-items"></div>
             </div>
@@ -296,7 +408,7 @@
     <script>
         // Create some confetti for extra fun
         function createConfetti() {
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 15; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
                 confetti.style.left = Math.random() * 100 + 'vw';
@@ -344,9 +456,446 @@
         });
     </script>
     
-    <script src="config.js"></script>
-    <script src="fruit.js"></script>
-    <script src="utils.js"></script>
-    <script src="game.js"></script>
+    <script>
+        // config.js - Game configuration
+        const FRUIT_TYPES = [
+            { name: 'cherry', points: 1, radius: 20, next: 'strawberry' },
+            { name: 'strawberry', points: 3, radius: 30, next: 'grape' },
+            { name: 'grape', points: 6, radius: 40, next: 'orange' },
+            { name: 'orange', points: 10, radius: 50, next: 'apple' },
+            { name: 'apple', points: 15, radius: 60, next: 'pear' },
+            { name: 'pear', points: 21, radius: 70, next: 'pineapple' },
+            { name: 'pineapple', points: 28, radius: 80, next: null }
+        ];
+
+        const MERGE_DISTANCE = 50;
+        const INITIAL_FRUIT = 'cherry';
+        const GRAVITY = 0.5;
+        const FRICTION = 0.98;
+        const BOUNCE_FACTOR = 0.7;
+    </script>
+    
+    <script>
+        // fruit.js - Fruit class and management
+        class Fruit {
+            constructor(type, x, y) {
+                this.type = type;
+                this.x = x;
+                this.y = y;
+                this.vx = 0;
+                this.vy = 0;
+                this.radius = this.getRadius();
+                this.element = this.createElement();
+                this.updatePosition();
+            }
+            
+            getRadius() {
+                const fruitType = FRUIT_TYPES.find(f => f.name === this.type);
+                return fruitType ? fruitType.radius : 20;
+            }
+            
+            createElement() {
+                const element = document.createElement('div');
+                element.className = `fruit ${this.type}`;
+                element.style.width = `${this.radius * 2}px`;
+                element.style.height = `${this.radius * 2}px`;
+                document.getElementById('game-container').appendChild(element);
+                return element;
+            }
+            
+            updatePosition() {
+                this.element.style.left = `${this.x - this.radius}px`;
+                this.element.style.top = `${this.y - this.radius}px`;
+            }
+            
+            updatePhysics() {
+                this.vy += GRAVITY;
+                this.vx *= FRICTION;
+                this.vy *= FRICTION;
+                
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Boundary collision
+                const gameContainer = document.getElementById('game-container');
+                const containerWidth = gameContainer.clientWidth;
+                const containerHeight = gameContainer.clientHeight;
+                
+                if (this.x - this.radius < 0) {
+                    this.x = this.radius;
+                    this.vx = -this.vx * BOUNCE_FACTOR;
+                }
+                if (this.x + this.radius > containerWidth) {
+                    this.x = containerWidth - this.radius;
+                    this.vx = -this.vx * BOUNCE_FACTOR;
+                }
+                if (this.y + this.radius > containerHeight) {
+                    this.y = containerHeight - this.radius;
+                    this.vy = -this.vy * BOUNCE_FACTOR;
+                }
+                
+                this.updatePosition();
+            }
+            
+            remove() {
+                if (this.element && this.element.parentNode) {
+                    this.element.parentNode.removeChild(this.element);
+                }
+            }
+        }
+    </script>
+    
+    <script>
+        // utils.js - Utility functions
+        function getFruitConfig(type) {
+            return FRUIT_TYPES.find(f => f.name === type);
+        }
+        
+        function getNextFruitType(type) {
+            const config = getFruitConfig(type);
+            return config ? config.next : null;
+        }
+        
+        function getPointsForFruit(type) {
+            const config = getFruitConfig(type);
+            return config ? config.points : 0;
+        }
+        
+        function distanceBetween(fruit1, fruit2) {
+            const dx = fruit1.x - fruit2.x;
+            const dy = fruit1.y - fruit2.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+        
+        function canMerge(fruit1, fruit2) {
+            return fruit1.type === fruit2.type && 
+                   distanceBetween(fruit1, fruit2) < MERGE_DISTANCE;
+        }
+        
+        function getRandomPosition(radius) {
+            const gameContainer = document.getElementById('game-container');
+            const maxX = gameContainer.clientWidth - radius * 2;
+            const maxY = gameContainer.clientHeight - radius * 2;
+            
+            return {
+                x: radius + Math.random() * maxX,
+                y: radius + Math.random() * maxY
+            };
+        }
+    </script>
+    
+    <script>
+        // game.js - Main game logic
+        class Game {
+            constructor() {
+                this.fruits = [];
+                this.score = 0;
+                this.nextFruitType = INITIAL_FRUIT;
+                this.isGameOver = false;
+                this.draggedFruit = null;
+                this.dragOffset = { x: 0, y: 0 };
+                
+                this.init();
+            }
+            
+            init() {
+                this.updateScore();
+                this.updateNextFruit();
+                this.createLegend();
+                this.setupEventListeners();
+                this.gameLoop();
+            }
+            
+            setupEventListeners() {
+                const gameContainer = document.getElementById('game-container');
+                
+                // Touch events for mobile
+                gameContainer.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    const rect = gameContainer.getBoundingClientRect();
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    
+                    this.handleDragStart(x, y);
+                });
+                
+                gameContainer.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    if (!this.draggedFruit) return;
+                    
+                    const touch = e.touches[0];
+                    const rect = gameContainer.getBoundingClientRect();
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    
+                    this.handleDragMove(x, y);
+                });
+                
+                gameContainer.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.handleDragEnd();
+                });
+                
+                // Mouse events for desktop
+                gameContainer.addEventListener('mousedown', (e) => {
+                    const rect = gameContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    this.handleDragStart(x, y);
+                });
+                
+                gameContainer.addEventListener('mousemove', (e) => {
+                    if (!this.draggedFruit) return;
+                    
+                    const rect = gameContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    this.handleDragMove(x, y);
+                });
+                
+                gameContainer.addEventListener('mouseup', () => {
+                    this.handleDragEnd();
+                });
+                
+                // Prevent context menu on long press
+                gameContainer.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                });
+            }
+            
+            handleDragStart(x, y) {
+                // Find the fruit being dragged (top-most fruit at the position)
+                for (let i = this.fruits.length - 1; i >= 0; i--) {
+                    const fruit = this.fruits[i];
+                    const dx = x - fruit.x;
+                    const dy = y - fruit.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance <= fruit.radius) {
+                        this.draggedFruit = fruit;
+                        this.dragOffset.x = dx;
+                        this.dragOffset.y = dy;
+                        break;
+                    }
+                }
+            }
+            
+            handleDragMove(x, y) {
+                if (!this.draggedFruit) return;
+                
+                this.draggedFruit.x = x - this.dragOffset.x;
+                this.draggedFruit.y = y - this.dragOffset.y;
+                this.draggedFruit.vx = 0;
+                this.draggedFruit.vy = 0;
+                this.draggedFruit.updatePosition();
+            }
+            
+            handleDragEnd() {
+                if (!this.draggedFruit) return;
+                
+                // Add some velocity when releasing
+                this.draggedFruit.vx = (this.draggedFruit.x - (this.draggedFruit.x - this.dragOffset.x)) * 0.5;
+                this.draggedFruit.vy = (this.draggedFruit.y - (this.draggedFruit.y - this.dragOffset.y)) * 0.5;
+                
+                this.draggedFruit = null;
+                this.checkMerges();
+            }
+            
+            addFruit(type, x, y) {
+                const fruit = new Fruit(type, x, y);
+                this.fruits.push(fruit);
+                return fruit;
+            }
+            
+            removeFruit(fruit) {
+                const index = this.fruits.indexOf(fruit);
+                if (index !== -1) {
+                    this.fruits.splice(index, 1);
+                    fruit.remove();
+                }
+            }
+            
+            checkMerges() {
+                let merged = false;
+                
+                for (let i = 0; i < this.fruits.length; i++) {
+                    for (let j = i + 1; j < this.fruits.length; j++) {
+                        const fruit1 = this.fruits[i];
+                        const fruit2 = this.fruits[j];
+                        
+                        if (canMerge(fruit1, fruit2)) {
+                            this.mergeFruits(fruit1, fruit2);
+                            merged = true;
+                            break;
+                        }
+                    }
+                    if (merged) break;
+                }
+                
+                if (merged) {
+                    this.checkMerges(); // Check for chain reactions
+                }
+            }
+            
+            mergeFruits(fruit1, fruit2) {
+                const nextType = getNextFruitType(fruit1.type);
+                const points = getPointsForFruit(fruit1.type) * 2;
+                
+                // Calculate center position
+                const x = (fruit1.x + fruit2.x) / 2;
+                const y = (fruit1.y + fruit2.y) / 2;
+                
+                // Remove the merged fruits
+                this.removeFruit(fruit1);
+                this.removeFruit(fruit2);
+                
+                // Add points
+                this.score += points;
+                this.updateScore();
+                
+                // Show fun message
+                showFunMessage(`+${points} points!`, x, y);
+                
+                if (nextType) {
+                    // Create the next level fruit
+                    const newFruit = this.addFruit(nextType, x, y);
+                    
+                    // Add a little bounce effect
+                    newFruit.vy = -5;
+                    
+                    // Create confetti for successful merge
+                    createConfetti();
+                } else {
+                    // Maximum fruit reached - game win condition
+                    this.showGameOver("You Win! 🎉");
+                }
+            }
+            
+            spawnNextFruit() {
+                const pos = getRandomPosition(getFruitConfig(this.nextFruitType).radius);
+                this.addFruit(this.nextFruitType, pos.x, pos.y);
+                
+                // Update next fruit
+                this.nextFruitType = INITIAL_FRUIT;
+                this.updateNextFruit();
+                
+                // Check if game is over (too many fruits)
+                if (this.fruits.length > 15) {
+                    this.showGameOver("Game Over! 😵");
+                }
+            }
+            
+            updateNextFruit() {
+                const nextFruitElement = document.getElementById('next-fruit');
+                nextFruitElement.className = `fruit ${this.nextFruitType}`;
+                nextFruitElement.style.width = `${getFruitConfig(this.nextFruitType).radius * 2}px`;
+                nextFruitElement.style.height = `${getFruitConfig(this.nextFruitType).radius * 2}px`;
+            }
+            
+            updateScore() {
+                document.getElementById('score').textContent = `Score: ${this.score}`;
+            }
+            
+            createLegend() {
+                const legendItems = document.getElementById('legend-items');
+                legendItems.innerHTML = '';
+                
+                FRUIT_TYPES.forEach(fruit => {
+                    const item = document.createElement('div');
+                    item.className = 'legend-item';
+                    
+                    const fruitElement = document.createElement('div');
+                    fruitElement.className = `legend-fruit ${fruit.name}`;
+                    
+                    const text = document.createElement('span');
+                    text.textContent = `${fruit.name} = ${fruit.points} pts`;
+                    
+                    item.appendChild(fruitElement);
+                    item.appendChild(text);
+                    legendItems.appendChild(item);
+                });
+            }
+            
+            showGameOver(message) {
+                this.isGameOver = true;
+                
+                const gameOverElement = document.createElement('div');
+                gameOverElement.id = 'game-over';
+                gameOverElement.textContent = message;
+                
+                document.getElementById('game-container').appendChild(gameOverElement);
+                
+                // Add restart button after a delay
+                setTimeout(() => {
+                    const restartButton = document.createElement('button');
+                    restartButton.textContent = 'Play Again';
+                    restartButton.style.cssText = `
+                        margin-top: 20px;
+                        padding: 10px 20px;
+                        font-size: 18px;
+                        background: #56ab2f;
+                        color: white;
+                        border: none;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        font-family: 'Comic Sans MS', cursive;
+                    `;
+                    restartButton.onclick = () => {
+                        location.reload();
+                    };
+                    gameOverElement.appendChild(restartButton);
+                }, 1000);
+            }
+            
+            gameLoop() {
+                if (this.isGameOver) return;
+                
+                // Update physics for all fruits
+                this.fruits.forEach(fruit => {
+                    fruit.updatePhysics();
+                });
+                
+                // Check for merges
+                this.checkMerges();
+                
+                // Continue the game loop
+                requestAnimationFrame(() => this.gameLoop());
+            }
+        }
+        
+        // Initialize the game when the page loads
+        window.addEventListener('load', () => {
+            const game = new Game();
+            
+            // Spawn initial fruits
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => game.spawnNextFruit(), i * 500);
+            }
+            
+            // Auto-spawn fruits periodically
+            setInterval(() => {
+                if (!game.isGameOver) {
+                    game.spawnNextFruit();
+                }
+            }, 5000);
+            
+            // Allow tapping to spawn fruit on mobile
+            document.getElementById('game-container').addEventListener('click', (e) => {
+                if (e.target.id === 'game-container' && !game.isGameOver) {
+                    const rect = e.target.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    game.addFruit(game.nextFruitType, x, y);
+                    
+                    // Update next fruit
+                    game.nextFruitType = INITIAL_FRUIT;
+                    game.updateNextFruit();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
